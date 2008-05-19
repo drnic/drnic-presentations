@@ -18,15 +18,58 @@ h1. Create project
 
     @hobo meeting_app@
 
-:code code/new_app/init.txt[class=code-normal]
+:inlinecode
+Generating Rails app...
+
+Initialising Hobo...
+      create  app/views/taglibs
+      create  app/views/taglibs/themes
+      create  public/hobothemes
+      create  app/views/taglibs/application.dryml
+      create  app/models/guest.rb
+      create  public/javascripts/dryml-support.js
+
+Installing Hobo Rapid and default theme...
+      create  public/javascripts/hobo-rapid.js
+      create  public/javascripts/lowpro.js
+      create  public/javascripts/IE7.js
+:endinlinecode
+
 
 h1. Create User model and controller
 
-:code code/new_app/user_model.txt[class=code-normal]
+:inlinecode
+Creating user model and controller...
+      create  app/models/user.rb
+      create  test/unit/user_test.rb
+      create  test/fixtures/users.yml
+      create  app/views/users
+      create  app/controllers/users_controller.rb
+      create  test/functional/users_controller_test.rb
+      create  app/helpers/users_helper.rb
+
+Creating standard pages...
+      create  app/views/front
+      create  app/controllers/front_controller.rb
+      create  test/functional/front_controller_test.rb
+      create  app/helpers/front_helper.rb
+      create  app/views/front/index.dryml
+      create  app/views/front/search.dryml
+:endinlinecode
+
 
 h1. Default pages
 
-:code code/new_app/std_pages.txt[class=code-normal]
+:inlinecode
+Creating standard pages...
+      create  app/views/front
+      create  app/controllers/front_controller.rb
+      create  test/functional/front_controller_test.rb
+      create  app/helpers/front_helper.rb
+      create  app/views/front/index.dryml
+      create  app/views/front/search.dryml
+:endinlinecode
+
 
 h1. In-built User authentication
 
@@ -46,12 +89,44 @@ h1. Migrations - what has changed?
 
 @script/generate hobo_migration@
 
-:code code/new_app/create_users.txt
+:inlinecode
+---------- Up Migration ----------
+create_table :users do |t|
+  t.string   :crypted_password, :limit => 40
+  t.string   :salt, :limit => 40
+  t.string   :remember_token
+  t.datetime :remember_token_expires_at
+  t.string   :username
+  t.boolean  :administrator, :default => false
+  t.datetime :created_at
+  t.datetime :updated_at
+end
+----------------------------------
+
+---------- Down Migration --------
+drop_table :users
+----------------------------------
+What now: [g]enerate migration, generate and [m]igrate now or [c]ancel?
+:endinline
 
 h1. Migrations - specify migration name
 
 @press 'm'@
-:code code/new_app/create_users2.txt
+:inlinecode
+What now: [g]enerate migration, generate and [m]igrate now or [c]ancel? m
+
+Migration filename:
+(you can type spaces instead of '_' -- every little helps)
+Filename [hobo_migration_1]: create users
+      create  db/migrate
+      create  db/migrate/001_create_users.rb
+(in /Users/drnic/Documents/rails_apps/hobo_apps/meeting_app)
+== 1 CreateUsers: migrating ===================================================
+-- create_table(:users)
+   -> 0.0120s
+== 1 CreateUsers: migrated (0.0121s) ==========================================
+:endinlinecode
+
 
 @ls db/migrate/@
 :inlinecode
