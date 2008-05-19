@@ -1,0 +1,16 @@
+Creating user model and controller...
+      create  app/models/user.rb
+      create  test/unit/user_test.rb
+      create  test/fixtures/users.yml
+      create  app/views/users
+      create  app/controllers/users_controller.rb
+      create  test/functional/users_controller_test.rb
+      create  app/helpers/users_helper.rb
+
+Creating standard pages...
+      create  app/views/front
+      create  app/controllers/front_controller.rb
+      create  test/functional/front_controller_test.rb
+      create  app/helpers/front_helper.rb
+      create  app/views/front/index.dryml
+      create  app/views/front/search.dryml

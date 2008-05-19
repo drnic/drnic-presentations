@@ -1,0 +1,61 @@
+h1. New application
+
+h1. Installation
+
+* As a RubyGem
+
+		@sudo gem install hobo@
+		
+* From source
+
+		@git clone git://github.com/tablatom/hobo.git@
+
+	* @rake install@ inside each gem folder
+
+h1. Create project
+
+* Use @hobo@ instead of @rails@
+
+    @hobo meeting_app@
+
+:code code/new_app/init.txt[class=code-normal]
+
+h1. Create User model and controller
+
+:code code/new_app/user_model.txt[class=code-normal]
+
+h1. Default pages
+
+:code code/new_app/std_pages.txt[class=code-normal]
+
+h1. In-built User authentication
+
+:code code/new_app/app/app/models/user.rb[class=code-supertiny]
+
+h1. Permissions for all models
+
+:code code/new_app/app/app/models/user-2.rb[permissions]
+
+h1. Auto-migrations
+
+* RubyGem @hobofields@
+
+:code code/new_app/app/app/models/user-2.rb[hobofields class=code-large]
+
+h1. Migrations - what has changed?
+
+@script/generate hobo_migration@
+
+:code code/new_app/create_users.txt
+
+h1. Migrations - specify migration name
+
+@press 'm'@
+:code code/new_app/create_users2.txt
+
+@ls db/migrate/@
+:inlinecode
+  001_create_users.rb
+:endinlinecode
+
+@script/server@

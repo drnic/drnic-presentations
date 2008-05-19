@@ -1,0 +1,293 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<title>Introduction to Hobo</title>
+<!-- metadata -->
+<meta name="generator" content="S5" />
+<meta name="version" content="S5 1.1" />
+<meta name="presdate" content="20050728" />
+<meta name="author" content="Dr Nic" />
+<meta name="company" content="Dr Nic Academy Pty Ltd" />
+<!-- configuration parameters -->
+<meta name="defaultView" content="slideshow" />
+<meta name="controlVis" content="hidden" />
+<!-- style sheet links -->
+<link rel="stylesheet" href="../ui/default/slides.css" type="text/css" media="projection" id="slideProj" />
+<link rel="stylesheet" href="../ui/default/outline.css" type="text/css" media="screen" id="outlineStyle" />
+<link rel="stylesheet" href="../lib/stylesheets/print.css" type="text/css" media="print" id="slidePrint" />
+<link rel="stylesheet" href="../ui/default/opera.css" type="text/css" media="projection" id="operaFix" />
+
+<link rel="stylesheet" href="../lib/stylesheets/pressie.css" type="text/css" />
+
+<!-- S5 JS -->
+<script src="../ui/default/slides.js" type="text/javascript"></script>
+
+<!-- Syntax Highlighter -->
+<link rel="stylesheet"  href="../dp.SyntaxHighlighter/Styles/SyntaxHighlighter.css"></link>
+
+</head>
+<body>
+
+<div class="layout">
+<div id="controls"><!-- DO NOT EDIT --></div>
+<div id="currentSlide"><!-- DO NOT EDIT --></div>
+<div id="header"></div>
+<div id="footer">
+<h2>Copyright &copy; 2008 Dr Nic Williams</h2>
+</div>
+
+</div>
+
+
+<div class="presentation">
+<div class="slide">
+
+	<h1>New application</h1>
+
+
+</div>
+<div class="slide">
+
+	<h1>Installation</h1>
+
+
+	<ul>
+	<li>As a RubyGem
+
+	<p><code>sudo gem install hobo</code></p></li>
+	</ul>
+
+
+	<ul>
+	<li>From source	<p><code>git clone git://github.com/tablatom/hobo.git</code></p>
+
+
+	<ul>
+	<li><code>rake install</code> inside each gem folder</li>
+	</ul></li>
+	</ul>
+
+
+</div>
+<div class="slide">
+
+	<h1>Create project</h1>
+
+
+	<ul>
+	<li>Use <code>hobo</code> instead of <code>rails</code>
+
+	<p><code>hobo meeting_app</code></p></li>
+	</ul>
+
+
+<div class="code-normal">
+
+<pre name="code" class="ruby:nogutter:nocontrols">Generating Rails app...
+
+Initialising Hobo...
+      create  app/views/taglibs
+      create  app/views/taglibs/themes
+      create  public/hobothemes
+      create  app/views/taglibs/application.dryml
+      create  app/models/guest.rb
+      create  public/javascripts/dryml-support.js
+
+Installing Hobo Rapid and default theme...
+      create  public/javascripts/hobo-rapid.js
+      create  public/javascripts/lowpro.js
+      create  public/javascripts/IE7.js</pre></div><div class="codeurl"><a href="txmt://open?url=file:///Users/drnic/Documents/Presentations/hobo-introduction/code/new_app/init.txt">code/new_app/init.txt</a></div>
+
+</div>
+<div class="slide">
+
+	<h1>Create User model and controller</h1>
+
+
+<div class="code-normal">
+
+<pre name="code" class="ruby:nogutter:nocontrols">Creating user model and controller...
+      create  app/models/user.rb
+      create  test/unit/user_test.rb
+      create  test/fixtures/users.yml
+      create  app/views/users
+      create  app/controllers/users_controller.rb
+      create  test/functional/users_controller_test.rb
+      create  app/helpers/users_helper.rb
+
+Creating standard pages...
+      create  app/views/front
+      create  app/controllers/front_controller.rb
+      create  test/functional/front_controller_test.rb
+      create  app/helpers/front_helper.rb
+      create  app/views/front/index.dryml
+      create  app/views/front/search.dryml</pre></div><div class="codeurl"><a href="txmt://open?url=file:///Users/drnic/Documents/Presentations/hobo-introduction/code/new_app/user_model.txt">code/new_app/user_model.txt</a></div>
+
+</div>
+<div class="slide">
+
+	<h1>Default pages</h1>
+
+
+<div class="code-normal">
+
+<pre name="code" class="ruby:nogutter:nocontrols">Creating standard pages...
+      create  app/views/front
+      create  app/controllers/front_controller.rb
+      create  test/functional/front_controller_test.rb
+      create  app/helpers/front_helper.rb
+      create  app/views/front/index.dryml
+      create  app/views/front/search.dryml</pre></div><div class="codeurl"><a href="txmt://open?url=file:///Users/drnic/Documents/Presentations/hobo-introduction/code/new_app/std_pages.txt">code/new_app/std_pages.txt</a></div>
+
+</div>
+<div class="slide">
+
+	<h1>In-built User authentication</h1>
+
+
+<div class="code-supertiny">
+
+<pre name="code" class="ruby:nogutter:nocontrols">class User &lt; ActiveRecord::Base
+  hobo_user_model # Don't put anything above this
+  fields do
+    username :string, :login =&gt; true, :name =&gt; true
+    administrator :boolean, :default =&gt; false
+    timestamps
+  end
+  set_admin_on_first_user
+
+  # --- Hobo Permissions --- #
+  def creatable_by?(creator)
+    creator.administrator? || !administrator
+  end
+  def updatable_by?(updater, new)
+    updater.administrator? || (updater == self &#38;&#38; only_changed_fields?(new, :password, :password_confirmation))
+  end
+  def deletable_by?(deleter)
+    deleter.administrator?
+  end
+  def viewable_by?(viewer, field)
+    true
+  end
+end
+</pre></div><div class="codeurl"><a href="txmt://open?url=file:///Users/drnic/Documents/Presentations/hobo-introduction/code/new_app/app/app/models/user.rb">code/new_app/app/app/models/user.rb</a></div>
+
+</div>
+<div class="slide">
+
+	<h1>Permissions for all models</h1>
+
+
+<div class="code-normal">
+
+<pre name="code" class="ruby:nogutter:nocontrols">  def creatable_by?(creator)
+    creator.administrator? || !administrator
+  end
+  def updatable_by?(updater, new)
+    updater.administrator? || (updater == self &#38;&#38; only_changed_fields?(new, :password, :password_confirmation))
+  end
+  def deletable_by?(deleter)
+    deleter.administrator?
+  end
+  def viewable_by?(viewer, field)
+    true
+  end
+</pre></div><div class="codeurl"><a href="txmt://open?url=file:///Users/drnic/Documents/Presentations/hobo-introduction/code/new_app/app/app/models/user-2.rb">code/new_app/app/app/models/user-2.rb</a></div>
+
+</div>
+<div class="slide">
+
+	<h1>Auto-migrations</h1>
+
+
+	<ul>
+	<li>RubyGem <code>hobofields</code></li>
+	</ul>
+
+
+<div class="code-large">
+
+<pre name="code" class="ruby:nogutter:nocontrols">  fields do
+    username :string, :login =&gt; true, :name =&gt; true
+    administrator :boolean, :default =&gt; false
+    timestamps
+  end
+</pre></div><div class="codeurl"><a href="txmt://open?url=file:///Users/drnic/Documents/Presentations/hobo-introduction/code/new_app/app/app/models/user-2.rb">code/new_app/app/app/models/user-2.rb</a></div>
+
+</div>
+<div class="slide">
+
+	<h1>Migrations &#8211; what has changed?</h1>
+
+
+	<p><code>script/generate hobo_migration</code></p>
+
+
+<div class="code-normal">
+
+<pre name="code" class="ruby:nogutter:nocontrols">---------- Up Migration ----------
+create_table :users do |t|
+  t.string   :crypted_password, :limit =&gt; 40
+  t.string   :salt, :limit =&gt; 40
+  t.string   :remember_token
+  t.datetime :remember_token_expires_at
+  t.string   :username
+  t.boolean  :administrator, :default =&gt; false
+  t.datetime :created_at
+  t.datetime :updated_at
+end
+----------------------------------
+
+---------- Down Migration --------
+drop_table :users
+----------------------------------
+What now: [g]enerate migration, generate and [m]igrate now or [c]ancel?</pre></div><div class="codeurl"><a href="txmt://open?url=file:///Users/drnic/Documents/Presentations/hobo-introduction/code/new_app/create_users.txt">code/new_app/create_users.txt</a></div>
+
+</div>
+<div class="slide">
+
+	<h1>Migrations &#8211; specify migration name</h1>
+
+
+<code>press 'm'</code>
+<div class="code-normal">
+
+<pre name="code" class="ruby:nogutter:nocontrols">What now: [g]enerate migration, generate and [m]igrate now or [c]ancel? m
+
+Migration filename:
+(you can type spaces instead of '_' -- every little helps)
+Filename [hobo_migration_1]: create users
+      create  db/migrate
+      create  db/migrate/001_create_users.rb
+(in /Users/drnic/Documents/rails_apps/hobo_apps/meeting_app)
+== 1 CreateUsers: migrating ===================================================
+-- create_table(:users)
+   -&gt; 0.0120s
+== 1 CreateUsers: migrated (0.0121s) ==========================================
+</pre></div><div class="codeurl"><a href="txmt://open?url=file:///Users/drnic/Documents/Presentations/hobo-introduction/code/new_app/create_users2.txt">code/new_app/create_users2.txt</a></div>
+
+<code>ls db/migrate/</code>
+<div class="code-normal">
+
+<pre name="code" class="ruby:nogutter:nocontrols">
+
+  001_create_users.rb
+</pre></div>
+
+	<p><code>script/server</code></div></p>
+
+  <!-- Syntax Highlighter -->
+  <script language="javascript" src="../dp.SyntaxHighlighter/Scripts/shCore.js"></script>
+  <script language="javascript" src="../dp.SyntaxHighlighter/Scripts/shBrushCpp.js"></script>
+  <script language="javascript" src="../dp.SyntaxHighlighter/Scripts/shBrushRuby.js"></script>
+  <script language="javascript" src="../dp.SyntaxHighlighter/Scripts/shBrushXml.js"></script>
+  <script language="javascript">
+  dp.SyntaxHighlighter.ClipboardSwf = '/flash/clipboard.swf';
+  dp.SyntaxHighlighter.HighlightAll('code');
+  </script>
+</div>
+</body>
+</html>
