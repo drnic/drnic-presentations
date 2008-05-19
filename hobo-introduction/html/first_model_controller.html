@@ -45,7 +45,158 @@
 <div class="presentation">
 <div class="slide">
 
-	<h1>First model and controller</div></h1>
+	<h1>First model and controller</h1>
+
+
+</div>
+<div class="slide">
+
+	<h1>Meeting model</h1>
+
+
+	<p><code>script/generate hobo_model Meeting title:string body:textile date:datetime</code></p>
+
+
+<div class="code-normal">
+
+<pre name="code" class="ruby:nogutter:nocontrols">class Meeting &lt; ActiveRecord::Base
+  hobo_model # Don't put anything above this
+
+  fields do
+    title :string
+    body :textile
+    date :datetime
+    timestamps
+  end
+
+  belongs_to :user, :creator =&gt; true
+
+  def creatable_by?(user)
+    user.administrator?
+  end
+  def updatable_by?(user, new)
+    user.administrator?
+  end
+  def deletable_by?(user)
+    user.administrator?
+  end
+  def viewable_by?(user, field)
+    true
+  end
+end
+</pre></div><div class="codeurl"><a href="txmt://open?url=file:///Users/drnic/Documents/Presentations/drnic-presentations/hobo-introduction/code/meeting/app/models/meeting.rb">code/meeting/app/models/meeting.rb</a></div>
+
+</div>
+<div class="slide">
+
+	<h1>Who can create?</h1>
+
+
+	<ul>
+	<li>Default</li>
+	</ul>
+
+
+<div class="code-normal">
+
+<pre name="code" class="ruby:nogutter:nocontrols">
+
+def creatable_by?(user)
+  user.administrator?
+end
+</pre></div>
+
+	<ul>
+	<li>Any user or guest</li>
+	</ul>
+
+
+<div class="code-normal">
+
+<pre name="code" class="ruby:nogutter:nocontrols">
+
+def creatable_by?(user)
+  true
+end
+</pre></div>
+
+	<ul>
+	<li>Any user, no guests</li>
+	</ul>
+
+
+<div class="code-normal">
+
+<pre name="code" class="ruby:nogutter:nocontrols">
+
+def creatable_by?(user)
+  !user.guest?
+end
+</pre></div>
+
+</div>
+<div class="slide">
+
+	<h1>Auto-migration</h1>
+
+
+	<p><code>script/generate hobo_migration</code></p>
+
+
+<div class="code-normal">
+
+<pre name="code" class="ruby:nogutter:nocontrols">
+
+---------- Up Migration ----------
+create_table :meetings do |t|
+  t.string   :title
+  t.text     :body
+  t.datetime :date
+  t.datetime :created_at
+  t.datetime :updated_at
+end
+----------------------------------
+
+---------- Down Migration --------
+drop_table :meetings
+----------------------------------
+</pre></div>
+
+</div>
+<div class="slide">
+
+	<h1>Associate Meeting and User</h1>
+
+
+	<ul>
+	<li><code>Meeting.belongs_to :user</code></li>
+	</ul>
+
+
+<div class="code-normal">
+
+<pre name="code" class="ruby:nogutter:nocontrols">  belongs_to :user, :creator =&gt; true
+</pre></div><div class="codeurl"><a href="txmt://open?url=file:///Users/drnic/Documents/Presentations/drnic-presentations/hobo-introduction/code/meeting/app/models/meeting.rb">code/meeting/app/models/meeting.rb</a></div>
+
+	<ul>
+	<li><code>script/generate hobo_migration</code></li>
+	</ul>
+
+
+<div class="code-normal">
+
+<pre name="code" class="ruby:nogutter:nocontrols">
+
+---------- Up Migration ----------
+add_column :meetings, :user_id, :integer
+----------------------------------
+
+---------- Down Migration --------
+remove_column :meetings, :user_id
+----------------------------------
+</pre></div>
+
+</div>
 
   <!-- Syntax Highlighter -->
   <script language="javascript" src="../dp.SyntaxHighlighter/Scripts/shCore.js"></script>

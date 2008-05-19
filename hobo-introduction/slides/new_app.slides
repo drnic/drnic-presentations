@@ -58,4 +58,16 @@ h1. Migrations - specify migration name
   001_create_users.rb
 :endinlinecode
 
+h1. The basic app
+
 @script/server@
+
+!images/basic_app.jpg(Basic App)!
+
+h1. Signup
+
+* Default signup mechanism
+* First user is admin
+
+!images/signup.jpg(Signup)!
+

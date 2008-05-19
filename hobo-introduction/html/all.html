@@ -129,7 +129,7 @@ Initialising Hobo...
 Installing Hobo Rapid and default theme...
       create  public/javascripts/hobo-rapid.js
       create  public/javascripts/lowpro.js
-      create  public/javascripts/IE7.js</pre></div><div class="codeurl"><a href="txmt://open?url=file:///Users/drnic/Documents/Presentations/hobo-introduction/code/new_app/init.txt">code/new_app/init.txt</a></div>
+      create  public/javascripts/IE7.js</pre></div><div class="codeurl"><a href="txmt://open?url=file:///Users/drnic/Documents/Presentations/drnic-presentations/hobo-introduction/code/new_app/init.txt">code/new_app/init.txt</a></div>
 
 </div>
 <div class="slide">
@@ -154,7 +154,7 @@ Creating standard pages...
       create  test/functional/front_controller_test.rb
       create  app/helpers/front_helper.rb
       create  app/views/front/index.dryml
-      create  app/views/front/search.dryml</pre></div><div class="codeurl"><a href="txmt://open?url=file:///Users/drnic/Documents/Presentations/hobo-introduction/code/new_app/user_model.txt">code/new_app/user_model.txt</a></div>
+      create  app/views/front/search.dryml</pre></div><div class="codeurl"><a href="txmt://open?url=file:///Users/drnic/Documents/Presentations/drnic-presentations/hobo-introduction/code/new_app/user_model.txt">code/new_app/user_model.txt</a></div>
 
 </div>
 <div class="slide">
@@ -170,7 +170,7 @@ Creating standard pages...
       create  test/functional/front_controller_test.rb
       create  app/helpers/front_helper.rb
       create  app/views/front/index.dryml
-      create  app/views/front/search.dryml</pre></div><div class="codeurl"><a href="txmt://open?url=file:///Users/drnic/Documents/Presentations/hobo-introduction/code/new_app/std_pages.txt">code/new_app/std_pages.txt</a></div>
+      create  app/views/front/search.dryml</pre></div><div class="codeurl"><a href="txmt://open?url=file:///Users/drnic/Documents/Presentations/drnic-presentations/hobo-introduction/code/new_app/std_pages.txt">code/new_app/std_pages.txt</a></div>
 
 </div>
 <div class="slide">
@@ -193,24 +193,133 @@ Creating standard pages...
   def creatable_by?(creator)
     creator.administrator? || !administrator
   end
-
   def updatable_by?(updater, new)
     updater.administrator? || (updater == self &#38;&#38; only_changed_fields?(new, :password, :password_confirmation))
   end
-
   def deletable_by?(deleter)
     deleter.administrator?
   end
-
   def viewable_by?(viewer, field)
     true
   end
 end
-</pre></div><div class="codeurl"><a href="txmt://open?url=file:///Users/drnic/Documents/Presentations/hobo-introduction/code/new_app/app/app/models/user.rb">code/new_app/app/app/models/user.rb</a></div>
+</pre></div><div class="codeurl"><a href="txmt://open?url=file:///Users/drnic/Documents/Presentations/drnic-presentations/hobo-introduction/code/new_app/app/app/models/user.rb">code/new_app/app/app/models/user.rb</a></div>
 
 </div>
+<div class="slide">
+
+	<h1>Permissions for all models</h1>
+
+
+<div class="code-normal">
+
+<pre name="code" class="ruby:nogutter:nocontrols">  def creatable_by?(creator)
+    creator.administrator? || !administrator
+  end
+  def updatable_by?(updater, new)
+    updater.administrator? || (updater == self &#38;&#38; only_changed_fields?(new, :password, :password_confirmation))
+  end
+  def deletable_by?(deleter)
+    deleter.administrator?
+  end
+  def viewable_by?(viewer, field)
+    true
+  end
+</pre></div><div class="codeurl"><a href="txmt://open?url=file:///Users/drnic/Documents/Presentations/drnic-presentations/hobo-introduction/code/new_app/app/app/models/user-2.rb">code/new_app/app/app/models/user-2.rb</a></div>
+
+</div>
+<div class="slide">
+
+	<h1>Auto-migrations</h1>
+
+
+	<ul>
+	<li>RubyGem <code>hobofields</code></li>
+	</ul>
+
+
+<div class="code-large">
+
+<pre name="code" class="ruby:nogutter:nocontrols">  fields do
+    username :string, :login =&gt; true, :name =&gt; true
+    administrator :boolean, :default =&gt; false
+    timestamps
+  end
+</pre></div><div class="codeurl"><a href="txmt://open?url=file:///Users/drnic/Documents/Presentations/drnic-presentations/hobo-introduction/code/new_app/app/app/models/user-2.rb">code/new_app/app/app/models/user-2.rb</a></div>
+
+</div>
+<div class="slide">
+
+	<h1>Migrations &#8211; what has changed?</h1>
+
+
+	<p><code>script/generate hobo_migration</code></p>
+
+
+<div class="code-normal">
+
+<pre name="code" class="ruby:nogutter:nocontrols">---------- Up Migration ----------
+create_table :users do |t|
+  t.string   :crypted_password, :limit =&gt; 40
+  t.string   :salt, :limit =&gt; 40
+  t.string   :remember_token
+  t.datetime :remember_token_expires_at
+  t.string   :username
+  t.boolean  :administrator, :default =&gt; false
+  t.datetime :created_at
+  t.datetime :updated_at
+end
+----------------------------------
+
+---------- Down Migration --------
+drop_table :users
+----------------------------------
+What now: [g]enerate migration, generate and [m]igrate now or [c]ancel?</pre></div><div class="codeurl"><a href="txmt://open?url=file:///Users/drnic/Documents/Presentations/drnic-presentations/hobo-introduction/code/new_app/create_users.txt">code/new_app/create_users.txt</a></div>
+
+</div>
+<div class="slide">
+
+	<h1>Migrations &#8211; specify migration name</h1>
+
+
+<code>press 'm'</code>
+<div class="code-normal">
+
+<pre name="code" class="ruby:nogutter:nocontrols">What now: [g]enerate migration, generate and [m]igrate now or [c]ancel? m
+
+Migration filename:
+(you can type spaces instead of '_' -- every little helps)
+Filename [hobo_migration_1]: create users
+      create  db/migrate
+      create  db/migrate/001_create_users.rb
+(in /Users/drnic/Documents/rails_apps/hobo_apps/meeting_app)
+== 1 CreateUsers: migrating ===================================================
+-- create_table(:users)
+   -&gt; 0.0120s
+== 1 CreateUsers: migrated (0.0121s) ==========================================
+</pre></div><div class="codeurl"><a href="txmt://open?url=file:///Users/drnic/Documents/Presentations/drnic-presentations/hobo-introduction/code/new_app/create_users2.txt">code/new_app/create_users2.txt</a></div>
+
+<code>ls db/migrate/</code>
+<div class="code-normal">
+
+<pre name="code" class="ruby:nogutter:nocontrols">
+
+  001_create_users.rb
+</pre></div>
+
+<code>script/server</code>
+</div>
 <div class="title slide">
-<h1>First model and controller</div></h1>
+<h1>First model and controller</h1>
+
+
+</div>
+<div class="slide">
+
+	<h1>Meeting model</h1>
+
+
+	<p><code>script/generate hobo_model Meeting title:string body:textile date:datetime</code></div></p>
 
   <!-- Syntax Highlighter -->
   <script language="javascript" src="../dp.SyntaxHighlighter/Scripts/shCore.js"></script>
