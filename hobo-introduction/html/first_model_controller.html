@@ -69,8 +69,6 @@
     timestamps
   end
 
-  belongs_to :user, :creator =&gt; true
-
   def creatable_by?(user)
     user.administrator?
   end
@@ -84,7 +82,7 @@
     true
   end
 end
-</pre></div><div class="codeurl"><a href="txmt://open?url=file:///Users/drnic/Documents/Presentations/drnic-presentations/hobo-introduction/code/meeting/app/models/meeting.rb">code/meeting/app/models/meeting.rb</a></div>
+</pre></div><div class="codeurl"><a href="txmt://open?url=file:///Users/drnic/Documents/Presentations/drnic-presentations/hobo-introduction/code/meeting1/app/models/meeting.rb">code/meeting1/app/models/meeting.rb</a></div>
 
 </div>
 <div class="slide">
@@ -175,8 +173,12 @@ drop_table :meetings
 
 <div class="code-normal">
 
-<pre name="code" class="ruby:nogutter:nocontrols">  belongs_to :user, :creator =&gt; true
-</pre></div><div class="codeurl"><a href="txmt://open?url=file:///Users/drnic/Documents/Presentations/drnic-presentations/hobo-introduction/code/meeting/app/models/meeting.rb">code/meeting/app/models/meeting.rb</a></div>
+<pre name="code" class="ruby:nogutter:nocontrols">class Meeting &lt; ActiveRecord::Base
+
+  belongs_to :user, :creator =&gt; true
+
+end
+</pre></div><div class="codeurl"><a href="txmt://open?url=file:///Users/drnic/Documents/Presentations/drnic-presentations/hobo-introduction/code/meeting2/app/models/meeting.rb">code/meeting2/app/models/meeting.rb</a></div>
 
 	<ul>
 	<li><code>script/generate hobo_migration</code></li>
@@ -197,6 +199,64 @@ remove_column :meetings, :user_id
 </pre></div>
 
 </div>
+<div class="slide">
+
+	<h1>Magic hobo controller</h1>
+
+
+	<p><code>script/generate hobo_model_controller Meeting</code></p>
+
+
+<div class="code-normal">
+
+<pre name="code" class="ruby:nogutter:nocontrols">
+
+exists  app/controllers/
+exists  app/helpers/
+create  app/views/meetings
+exists  test/functional/
+create  app/controllers/meetings_controller.rb
+create  test/functional/meetings_controller_test.rb
+create  app/helpers/meetings_helper.rb
+</pre></div>
+
+</div>
+<div class="slide">
+
+	<h1>Meetings as guest</h1>
+
+
+	<p><code>script/server</code></p>
+
+
+	<p><img src="images/meetings_as_guest.jpg" width="781" height="383" alt="Meetings   As A Guest"></p>
+
+
+</div>
+<div class="slide">
+
+	<h1>Meetings as user</h1>
+
+
+	<p><img src="images/meetings_as_user.jpg" width="781" height="383" alt="Meetings   As A Guest"></p>
+
+
+</div>
+<div class="slide">
+
+	<h1>New meeting</h1>
+
+
+	<p><img src="../html/images/new_meetings.jpg" width="686" height="414" alt="New Meetings"></p>
+
+
+</div>
+<div class="slide">
+
+	<h1>List of meetings</h1>
+
+
+	<p><img src="../html/images/meeting_list.jpg" width="693" height="243" alt="Meeting List"></div></p>
 
   <!-- Syntax Highlighter -->
   <script language="javascript" src="../dp.SyntaxHighlighter/Scripts/shCore.js"></script>

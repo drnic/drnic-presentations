@@ -4,7 +4,7 @@ h1. Meeting model
 
 @script/generate hobo_model Meeting title:string body:textile date:datetime@
 
-:code code/meeting/app/models/meeting.rb
+:code code/meeting1/app/models/meeting.rb
 
 h1. Who can create?
 
@@ -56,7 +56,7 @@ h1. Associate Meeting and User
 
 * @Meeting.belongs_to :user@
 
-:code code/meeting/app/models/meeting.rb[user_meeting]
+:code code/meeting2/app/models/meeting.rb[user_meeting]
 
 
 * @script/generate hobo_migration@
@@ -70,4 +70,37 @@ add_column :meetings, :user_id, :integer
 remove_column :meetings, :user_id
 ----------------------------------
 :endinlinecode
+
+h1. Magic hobo controller
+
+@script/generate hobo_model_controller Meeting@
+
+:inlinecode
+exists  app/controllers/
+exists  app/helpers/
+create  app/views/meetings
+exists  test/functional/
+create  app/controllers/meetings_controller.rb
+create  test/functional/meetings_controller_test.rb
+create  app/helpers/meetings_helper.rb
+:endinlinecode
+
+h1. Meetings as guest
+
+@script/server@
+
+<img src="images/meetings_as_guest.jpg" width="781" height="383" alt="Meetings   As A Guest">
+
+h1. Meetings as user
+
+<img src="images/meetings_as_user.jpg" width="781" height="383" alt="Meetings   As A Guest">
+
+h1. New meeting
+
+<img src="../html/images/new_meetings.jpg" width="686" height="414" alt="New Meetings">
+
+h1. List of meetings
+
+<img src="../html/images/meeting_list.jpg" width="693" height="243" alt="Meeting List">
+
 
